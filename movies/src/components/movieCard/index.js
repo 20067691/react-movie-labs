@@ -15,6 +15,7 @@ import img from '../../images/film-poster-placeholder.png'
 import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import { MoviesContext } from "../../contexts/moviesContext";
+import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle';
 
 export default function MovieCard({movie, action}) {
   const { favorites, addToFavorites } = useContext(MoviesContext);
@@ -25,10 +26,15 @@ export default function MovieCard({movie, action}) {
     movie.favorite = false
   }
 
-  const handleAddToFavorite = (e) => {
-    e.preventDefault();
-    addToFavorites(movie);
-  };
+  const { mustWatch, addToWatchList } = useContext(MoviesContext);
+
+  if (mustWatch.find((id) => id === movie.id)) {
+    movie.watch = true;
+  } else {
+    movie.watch = false
+  }
+
+
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -37,6 +43,11 @@ export default function MovieCard({movie, action}) {
           movie.favorite ? (
             <Avatar sx={{ backgroundColor: 'red' }}>
               <FavoriteIcon />
+            </Avatar>
+          ) : 
+          movie.watch ? (
+            <Avatar sx={{ backgroundColor: 'red' }}>
+              <PlaylistAddCheckCircleIcon />
             </Avatar>
           ) : null
         }
